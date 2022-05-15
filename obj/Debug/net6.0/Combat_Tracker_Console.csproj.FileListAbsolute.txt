@@ -1,0 +1,15 @@
+C:\Users\dgrin\Combat_Tracker_Console\bin\Debug\net6.0\Combat_Tracker_Console.exe
+C:\Users\dgrin\Combat_Tracker_Console\bin\Debug\net6.0\Combat_Tracker_Console.deps.json
+C:\Users\dgrin\Combat_Tracker_Console\bin\Debug\net6.0\Combat_Tracker_Console.runtimeconfig.json
+C:\Users\dgrin\Combat_Tracker_Console\bin\Debug\net6.0\Combat_Tracker_Console.dll
+C:\Users\dgrin\Combat_Tracker_Console\bin\Debug\net6.0\Combat_Tracker_Console.pdb
+C:\Users\dgrin\Combat_Tracker_Console\obj\Debug\net6.0\Combat_Tracker_Console.csproj.AssemblyReference.cache
+C:\Users\dgrin\Combat_Tracker_Console\obj\Debug\net6.0\Combat_Tracker_Console.GeneratedMSBuildEditorConfig.editorconfig
+C:\Users\dgrin\Combat_Tracker_Console\obj\Debug\net6.0\Combat_Tracker_Console.AssemblyInfoInputs.cache
+C:\Users\dgrin\Combat_Tracker_Console\obj\Debug\net6.0\Combat_Tracker_Console.AssemblyInfo.cs
+C:\Users\dgrin\Combat_Tracker_Console\obj\Debug\net6.0\Combat_Tracker_Console.csproj.CoreCompileInputs.cache
+C:\Users\dgrin\Combat_Tracker_Console\obj\Debug\net6.0\Combat_Tracker_Console.dll
+C:\Users\dgrin\Combat_Tracker_Console\obj\Debug\net6.0\refint\Combat_Tracker_Console.dll
+C:\Users\dgrin\Combat_Tracker_Console\obj\Debug\net6.0\Combat_Tracker_Console.pdb
+C:\Users\dgrin\Combat_Tracker_Console\obj\Debug\net6.0\Combat_Tracker_Console.genruntimeconfig.cache
+C:\Users\dgrin\Combat_Tracker_Console\obj\Debug\net6.0\ref\Combat_Tracker_Console.dll
