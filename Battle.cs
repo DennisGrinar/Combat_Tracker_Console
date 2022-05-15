@@ -16,6 +16,7 @@ namespace Combat_Tracker_Console
             Encounter = encounter;
             //Preparation Phase
             //Figure out what to do if two or more BattleInit are the same.
+            initativeTracker = 0;
         }
 
          public void RollInitive()
@@ -57,8 +58,7 @@ namespace Combat_Tracker_Console
             InitativeOrder.Sort(( x, y) => y.BattleInit.CompareTo(x.BattleInit));
 
 
-            TopOfInitative = (InitativeOrder[0]).BattleInit;
-            initativeTracker = TopOfInitative;
+            TopOfInitative = InitativeOrder.Count - 1; //List is 0 index
 
         }
 
@@ -66,11 +66,21 @@ namespace Combat_Tracker_Console
         {
             foreach(var cre in InitativeOrder)
             {
-                if (initativeTracker == cre.BattleInit) Console.WriteLine($"-> {cre.Info()}");
+                if (InitativeOrder[initativeTracker] == cre) Console.WriteLine($"-> {cre.Info()}");
                 else Console.WriteLine(cre.Info());
             }
 
         } 
+
+        public void EndTurn()
+        {
+            InitativeOrder[initativeTracker].EndTurn();
+            initativeTracker ++;
+            if (initativeTracker == InitativeOrder.Count()) initativeTracker = 0;
+            InitativeOrder[initativeTracker].StartTurn();
+        }
+
+        public Creature GetCurrentInitCreature() {return InitativeOrder[initativeTracker];}
 
       /*  public async void Fight()
         {

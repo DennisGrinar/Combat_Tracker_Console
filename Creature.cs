@@ -81,6 +81,8 @@ namespace Combat_Tracker_Console
             return info ;
         }
 
+        public int GetRemainingSpeed(){return RemainingSpeed;}
+
         public string GetListReadout(List<string> fullList)
         {
             var info = "";
@@ -188,8 +190,8 @@ namespace Combat_Tracker_Console
         // Turn Actions
         public void Move(int distance) 
         {
-          if (RemainingSpeed <= distance)  this.RemainingSpeed =- distance;
-          if (RemainingSpeed == 0) this.HasMovement = false;
+          if (RemainingSpeed >= distance)  RemainingSpeed -= distance;
+          if (RemainingSpeed == 0) HasMovement = false;
         }
 
         public void UseAction() {this.HasAction = false;}
