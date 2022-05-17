@@ -80,7 +80,22 @@ namespace Combat_Tracker_Console
             InitativeOrder[initativeTracker].StartTurn();
         }
 
+        public ref List<Creature> GetCreatures() {return ref InitativeOrder;}
+
         public Creature GetCurrentInitCreature() {return InitativeOrder[initativeTracker];}
+
+        public string GetCreatureSelection()
+        {
+            int i = 1;
+            var info = "Enter the number on the left to select the target. \n";
+            foreach(var cre in InitativeOrder)
+            {
+                info += $"{i} \t {cre.Name}";
+                i++;
+            }
+
+            return info;
+        }
 
       /*  public async void Fight()
         {
