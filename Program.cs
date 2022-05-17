@@ -26,7 +26,11 @@
 
             Battle combat = new Battle(party, enemies);
 
+            
+
             combat.RollInitive();
+            ref List<Creature> EncounterList = ref combat.GetCreatures();
+            int amount = 0;
             combat.PrintInitativeOrder();
 
 
@@ -34,6 +38,7 @@
             PrintControls();
             
             var input =  Console.ReadLine();
+
 
             while (input != "Q")
             {
@@ -53,8 +58,30 @@
                         input = Console.ReadLine();
                         combat.GetCurrentInitCreature().Move(int.Parse(input));
                         break;
+                    case "DAM":
+                        Console.WriteLine("Who is taking damage?");
+                        Console.WriteLine(combat.GetCreatureSelection());
+                        input = Console.ReadLine();
+                        var cre = EncounterList[(int.Parse(input) - 1)];// -1 to account for list having 0 index
+                        Console.WriteLine("How much damage?");
+                        input = Console.ReadLine();
+                        amount = int.Parse(input); 
+                        Console.WriteLine("Was it a critial hit? Type 'Y' or 'N'");
+                        input = Console.ReadLine();
+                        bool crit = false;
+                        if(input == "Y") crit = true;
+                        cre.TakeDamage(amount,crit);
+                        break;
+                    case "HEAL":
+                        Console.WriteLine("How much healing?");
+                        input = Console.ReadLine();
+                        amount = int.Parse(input);                       
+                        Console.WriteLine("Who is getting healing?");
+                        Console.WriteLine(combat.GetCreatureSelection());
+                        input = Console.ReadLine();
+                        EncounterList[(int.Parse(input) - 1)].Heal(amount);// -1 to account for list having 0 index
+                        break;
 
-                    
                     default:
                         Console.WriteLine("Please try again");
                         break;
@@ -73,7 +100,7 @@
             Console.WriteLine("B to use B.Action");
             Console.WriteLine("M to use Movement");// figure out how to add distance traveled
             Console.WriteLine("DAM for Damage");
-            Console.WriteLine("Heal for Healing");
+            Console.WriteLine("HEAL for Healing");
             Console.WriteLine("CS to cast spell");
             Console.WriteLine("Q to Quit");
         }
