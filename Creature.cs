@@ -102,66 +102,66 @@ namespace Combat_Tracker_Console
         }
 
       
-        public static void TakeDamage(Creature name, int damage,bool crit)
+        public void TakeDamage(int damage,bool crit)
         {
-            
-            if (name.Status.Contains("Dying"))//checking for instant death saving throw failures if creature is already dying.
+            //Applying the rules for if a character is already dying.
+            if (Status.Contains("Dying"))//checking for instant death saving throw failures if creature is already dying.
             { 
-                if (damage >= name.MaxHP) ChangeStatus(name,"Dead");
-                name.DeathSaves.MakeDeathSavingThrow(false);
-                if (crit) name.DeathSaves.MakeDeathSavingThrow(false);
+                if (damage >= MaxHP) 
+                {
+                    ChangeStatus("Dead");
+                    DeathSaves.ResetDeathSaves();
+                }
+                DeathSaves.MakeDeathSavingThrow(false);
+                if (crit) DeathSaves.MakeDeathSavingThrow(false);
             }
             
 
             else
             {
                 //Creature getting hit with damage.
-                name.HP =- damage;
+                HP =- damage;
 
-
-                //TODO: check to see if concentrating check is needed.
-                if (name.Concentrating)
-                {
-
-                } 
-
-                // Drops below zero.
-                if (name.HP <= 0) 
-                {
-                    
-                    if (name.HP == 0) ChangeStatus(name,"Unconscious");
-
-                    if (name.MaxHP + name.HP <= 0) ChangeStatus(name, "Dead");// check for instant death
+                if (HP > 0 && Concentrating) ConcentrationCheck(damage);
                 
-                    name.HP = 0;
-                
-                    if (name.hasDeathSaves) ChangeStatus(name,"Dying");
-                    else ChangeStatus(name, "Dead");
-
+                if (HP == 0) 
+                {
+                    ChangeStatus("Unconscious");
+                    if (Concentrating) this.EndConcentrationSpell();
                 }
-
-                if (name.Concentrating == true)
+                // Drops below zero.
+                if (HP < 0) 
                 {
-                    //user input roll
-                    ConcentrationCheck(name, damage/*,roll*/);
+                    if (MaxHP + HP <= 0) ChangeStatus("Dead");// check for instant death
+
+                    if (Concentrating) this.EndConcentrationSpell();
+                    
+                    HP = 0;
+                
+                    if (hasDeathSaves) 
+                    {
+                        ChangeStatus("Dying");
+                        AddStatus("Unconscious");
+                    }
+                    else ChangeStatus("Dead");
+
                 }
             }
         }
 
- 
-        
-        public static void Heal(Creature name, int healing)
+        public void Heal(int healing)
         {
-            if (!name.Status.Contains("Dead")) // Healing doesn't work if creature is dead.
+            if (!Status.Contains("Dead")) // Healing doesn't work if creature is dead.
             {
-                name.HP =+ healing;
+                HP =+ healing;
 
-                if(name.HP > name.MaxHP) name.HP = name.MaxHP; // HP can not go over Max HP.
+                if(HP > MaxHP) HP = MaxHP; // HP can not go over Max HP.
                 
-                if (name.Status.Contains("Dying"))
+                if (Status.Contains("Dying"))
                 {
-                    RemoveStatus(name,"Dying");
-                    name.DeathSaves.ResetDeathSaves();
+                    RemoveStatus("Dying");
+                    RemoveStatus("Unconscious");
+                    DeathSaves.ResetDeathSaves();
                 }
             }
         }
@@ -228,23 +228,33 @@ namespace Combat_Tracker_Console
             {
                 if (sp.IsConcentrationSpell()) sp.EndSpell();
             }
+            Concentrating = false;
         }
-        private static void ConcentrationCheck(Creature name, int damage/*, int roll*/)
+        private void ConcentrationCheck(int damage)
         {
             int dc = 10;
-            if (damage / 2 > 10) dc = damage / 2;        
+            if (damage / 2 > 10) dc = damage / 2;
+
+
+            Console.WriteLine($"DC = {dc} What was the roll?");
+            var input = Console.ReadLine();
+            if (dc > int.Parse(input)) EndConcentrationSpell();
         }
 
         // Status Changes
-       private static void ChangeStatus(Creature name, string newStatus)
+       private void ChangeStatus(string newStatus)
         {
-            name.Status.Clear();
-            name.Status.Add(newStatus);
+            Status.Clear();
+            Status.Add(newStatus);
         }
-        private static void RemoveStatus(Creature name, string oldStatus)
+        private void RemoveStatus(string oldStatus)
         {
-            name.Status.Remove(oldStatus);
-            if (name.Status.Count() == 0) name.Status.Add("None");
+            Status.Remove(oldStatus);
+            if (Status.Count() == 0) Status.Add("None");
+        }
+        private void AddStatus(string newStatus)
+        {
+            Status.Add(newStatus);
         }
 
     }
