@@ -9,28 +9,29 @@ namespace Combat_Tracker_Console
         int duration {get;set;}
     
 
-        public Spell(string name, Creature caster, bool conc, List<Creature> targets, int dur) 
+        public Spell(string name, int casterId, bool conc, int[] targetIds, int dur, ref List<Creature> combatants) 
             {
                 Name = name;
-                Caster = caster;
+                Caster = combatants[casterId];
                 concentration = conc;
-                Targets = targets;
                 duration = dur;
 
                 // Removes old Concentration Spell if caster has one up and is casting another.
                 if (concentration) 
                 {
-                    if (caster.IsConcentrating()) {caster.EndConcentrationSpell();}
-                    caster.StartConcentration();
+                    if (Caster.IsConcentrating()) {Caster.EndConcentrationSpell();}
+                    Caster.StartConcentration();
+                }
+
+
+                // Adds the spell to the targets' effective by list.
+                foreach (var tar in targetIds)
+                {
+                       combatants[tar].AddSpellEffect(Name);
+                       Targets.Add(combatants[tar]);
                 }
                 // Adds Spell to Caster's active list
                 Caster.AddToSpellTracker(this);
-
-                // Adds the spell to the targets' effective by list.
-                foreach (var target in Targets)
-                {
-                    target.AddSpellEffect(this.Name);
-                }
 
             }
 

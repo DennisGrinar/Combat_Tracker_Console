@@ -6,6 +6,7 @@ namespace Combat_Tracker_Console
         List<Creature> Party = new List<Creature>();
         List<Creature> Encounter = new List<Creature>();
         List<Creature> InitativeOrder = new List<Creature>();
+        List<Spell> ActiveSpellList = new List<Spell>();
 
         int initativeTracker{get;set;}
         int TopOfInitative{get;set;}
@@ -82,7 +83,12 @@ namespace Combat_Tracker_Console
 
         public ref List<Creature> GetCreatures() {return ref InitativeOrder;}
 
+
         public Creature GetCurrentInitCreature() {return InitativeOrder[initativeTracker];}
+        public Creature GetTargetCreature(int id)
+        {
+            return InitativeOrder[id];
+        }
 
         public string GetCreatureSelection()
         {
@@ -90,12 +96,19 @@ namespace Combat_Tracker_Console
             var info = "Enter the number on the left to select the target. \n";
             foreach(var cre in InitativeOrder)
             {
-                info += $"{i} \t {cre.Name}";
+                info += $"{i} \t {cre.Name}\n";
                 i++;
             }
 
             return info;
         }
+
+        public void AddToActiveSpellList(string spellName, int casterID, bool conc, int[] targetID, int dur )
+        {
+            Spell sp = new Spell(spellName, casterID, conc, targetID, dur, ref InitativeOrder);
+            ActiveSpellList.Add(sp);
+        }
+        public void RemoveFromActiveSpellList(Spell sp){ActiveSpellList.Remove(sp);}
 
       /*  public async void Fight()
         {

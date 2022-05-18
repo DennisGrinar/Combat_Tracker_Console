@@ -59,21 +59,37 @@ namespace Combat_Tracker_Console
 
             InitGroup = group;
         }
+        public Creature ()
+        {
+            Name ="";
+            HP = 1;
+            MaxHP = 1;
+            AC = 0;
+            speed = 0;
+            hasDeathSaves = true;
+            TempHP = 0;
+            StartTurn();
+            Concentrating = false;
+            Status.Add("None");
+            SpellEffects.Add("None");
+            Concentrating = false;
+            InitGroup = "";
+        }
 
         public String Info()
         {
             string info =
-            $"{BattleInit} \t{Name} \t \tHP:{HP}/{MaxHP} \tAC:{AC} \tSPD:{RemainingSpeed}/{speed}\n" 
-          + $"\t\t\tACTION {HasAction}\tB. ACTION {HasBonusAction} \t MOVEMENT {HasMovement} \t REACTION {HasReaction} \t Concenrating {Concentrating}\n"
-          + $"\t\t\tStatus Effects: {this.GetListReadout(Status)} \t Spell Effects: {this.GetListReadout(SpellEffects)} \n"
-          + $"\t\t\t Spells Cast:";
+            $"{BattleInit} \t{Name}  \tHP:{HP}/{MaxHP} \tAC:{AC} \tSPD:{RemainingSpeed}/{speed}\n" 
+          + $"\tACTION {HasAction}\tB. ACTION {HasBonusAction} \t MOVEMENT {HasMovement} \t REACTION {HasReaction} \t Concenrating {Concentrating}\n"
+          + $"\tStatus Effects: {this.GetListReadout(Status)} \t Spell Effects: {this.GetListReadout(SpellEffects)} \n"
+          + $"\t Spells Cast:";
 
             if (this.SpellTracker.Count == 0) info += " None";
             else
             {
                 foreach (var sp in SpellTracker)
                 {
-                   info += $"\t\t\t {sp.SpellName}\t\t Effecting: {sp.GetTargets()}\t\t Duration: {sp.GetRemainingDuration}\t Concentration: {sp.IsConcentrationSpell}\n";
+                   info += $"\n \t\t {sp.SpellName()}\t\t Effecting: {sp.GetTargets()}\t\t Duration: {sp.GetRemainingDuration()}\t Concentration: {sp.IsConcentrationSpell()}\n";
                 }
             }
 
@@ -87,10 +103,10 @@ namespace Combat_Tracker_Console
         {
             var info = "";
             int count = 0;
-            foreach(var status in Status)
+            foreach(var item in fullList)
             {
-                if(count == 0) info += status;
-                else {info += $", {status}";}
+                if(count == 0) info += item;
+                else {info += $", {item}";}
                 count ++;
             }
             return info;
@@ -166,6 +182,7 @@ namespace Combat_Tracker_Console
             }
         }
 
+
         public void StartTurn()
         {
             this.RemainingSpeed = this.speed;
@@ -208,7 +225,7 @@ namespace Combat_Tracker_Console
         //Effected by Spell
         public void AddSpellEffect(string spellName) 
         {
-            if (this.SpellEffects.Contains("None")) this.SpellEffects.Remove("None");
+            if (SpellEffects.Contains("None")) SpellEffects.Remove("None");
             this.SpellEffects.Add(spellName);
         }
 
@@ -256,6 +273,8 @@ namespace Combat_Tracker_Console
         {
             Status.Add(newStatus);
         }
+
+
 
     }
     }

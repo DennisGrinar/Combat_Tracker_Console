@@ -31,6 +31,8 @@
             combat.RollInitive();
             ref List<Creature> EncounterList = ref combat.GetCreatures();
             int amount = 0;
+            int creatureID = 0;
+
             combat.PrintInitativeOrder();
 
 
@@ -39,10 +41,10 @@
             
             var input =  Console.ReadLine();
 
-
             while (input != "Q")
             {
-                switch (input)
+                var command = input; 
+                switch (command)
                 {
                     case "NT":
                         combat.EndTurn();
@@ -62,25 +64,75 @@
                         Console.WriteLine("Who is taking damage?");
                         Console.WriteLine(combat.GetCreatureSelection());
                         input = Console.ReadLine();
-                        var cre = EncounterList[(int.Parse(input) - 1)];// -1 to account for list having 0 index
+                        creatureID = int.Parse(input) - 1;
+
                         Console.WriteLine("How much damage?");
                         input = Console.ReadLine();
-                        amount = int.Parse(input); 
+                        amount = int.Parse(input);
+
                         Console.WriteLine("Was it a critial hit? Type 'Y' or 'N'");
                         input = Console.ReadLine();
                         bool crit = false;
                         if(input == "Y") crit = true;
-                        cre.TakeDamage(amount,crit);
+                        EncounterList[creatureID].TakeDamage(amount,crit);
+                        
                         break;
                     case "HEAL":
                         Console.WriteLine("How much healing?");
                         input = Console.ReadLine();
-                        amount = int.Parse(input);                       
+                        amount = int.Parse(input);
+
                         Console.WriteLine("Who is getting healing?");
                         Console.WriteLine(combat.GetCreatureSelection());
                         input = Console.ReadLine();
                         EncounterList[(int.Parse(input) - 1)].Heal(amount);// -1 to account for list having 0 index
+                        
                         break;
+                    case "CS":
+
+                        Console.WriteLine("Who is casting the spell?");
+                        Console.WriteLine(combat.GetCreatureSelection());
+                        input = Console.ReadLine();
+                        creatureID = int.Parse(input) - 1;
+
+                        Console.WriteLine("What is the name of the spell?");
+                        input = Console.ReadLine();
+                        var spellName = input;
+
+                        Console.WriteLine("Is it a concentration spell? Yes/No");
+                        bool yesOrNo = false;
+                        input = Console.ReadLine();
+                        if (input == "Yes") yesOrNo = true;
+                        else if (input == "No") yesOrNo = false;
+                        else Console.WriteLine("Please enter 'Yes' or 'No'.");
+
+
+                        Console.WriteLine("How many targets does the spell effect?");
+                        input = Console.ReadLine();
+                        amount = int.Parse(input);
+                        int[] charIds = new int[amount]; 
+
+                        for (int i  = 0; i < amount; i++)
+                        {
+                            Console.WriteLine($"{amount - i} target(s) left. Pick a target");
+                            combat.GetCreatureSelection();
+                            input = Console.ReadLine();
+                            charIds[i] = int.Parse(input) - 1;
+                        }
+
+                         List< Creature> targets =  new List<Creature>();
+
+                        foreach(var key in charIds)
+                        {
+                            targets.Add(EncounterList[key]);
+                        }
+
+                        Console.WriteLine("How may rounds does the spell last?");
+                        input = Console.ReadLine();
+                        amount = int.Parse(input);
+
+                        combat.AddToActiveSpellList(spellName, creatureID, yesOrNo,charIds, amount);
+                        break;    
 
                     default:
                         Console.WriteLine("Please try again");
