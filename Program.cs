@@ -30,8 +30,8 @@
 
             combat.RollInitive();
             ref List<Creature> EncounterList = ref combat.GetCreatures();
-            int amount = 0;
-            int creatureID = 0;
+            int amount;
+            int creatureID;
 
             combat.PrintInitativeOrder();
 
@@ -80,7 +80,7 @@
                         EncounterList[(InputInt(1, EncounterList.Count) - 1)].Heal(amount);// -1 to account for list having 0 index
 
                         break;
-                    case "C":
+                    case "CS":
 
                         Console.WriteLine("Who is casting the spell?");
                         Console.WriteLine(combat.GetCreatureSelection());
@@ -90,31 +90,40 @@
                         var spellName = InputString();
 
                         Console.WriteLine("Is it a concentration spell? Y/N");
-                        bool yesOrNo = InputBool();
-
-
-                        Console.WriteLine("How many targets does the spell effect?");
-                        amount = InputInt(1, EncounterList.Count());
-                        int[] charIds = new int[amount];
-
-                        for (int i = 0; i < amount; i++)
-                        {
-                            Console.WriteLine($"{amount - i} target(s) left. Pick a target");
-                            combat.GetCreatureSelection();
-                            charIds[i] = InputInt(1, EncounterList.Count()) - 1;// Figure out how to stop user frome selecting the same id twice
-                        }
-
-                        List<Creature> targets = new List<Creature>();
-
-                        foreach (var key in charIds)
-                        {
-                            targets.Add(EncounterList[key]);
-                        }
+                        bool conc = InputBool();
 
                         Console.WriteLine("How may rounds does the spell last?");
                         amount = InputInt();
 
-                        EncounterList[creatureID].CastSpell(spellName, yesOrNo, charIds, amount, ref EncounterList);
+
+
+                        Console.WriteLine("Does the spell target any creatures? Y/N");
+                        if (InputBool())
+                        {
+                            Console.WriteLine("How many targets does the spell effect?");
+                            amount = InputInt(1, EncounterList.Count());
+                            int[] charIds = new int[amount];
+
+                            for (int i = 0; i < amount; i++)
+                            {
+                                Console.WriteLine($"{amount - i} target(s) left. Pick a target");
+                                combat.GetCreatureSelection();
+                                charIds[i] = InputInt(1, EncounterList.Count()) - 1;// Figure out how to stop user frome selecting the same id twice
+                            }
+
+                            List<Creature> targets = new List<Creature>();
+
+                            foreach (var key in charIds)
+                            {
+                                targets.Add(EncounterList[key]);
+                            }
+
+                            Console.WriteLine("Is the spell moveable? Y/N");
+                            bool moveable = InputBool();
+
+                            EncounterList[creatureID].CastSpell(spellName, conc, amount, charIds, ref EncounterList, moveable);
+                        }
+                        else EncounterList[creatureID].CastSpell(spellName, conc, amount);
                         break;
 
                     default:
@@ -136,7 +145,7 @@
             Console.WriteLine("M to use Movement");// figure out how to add distance traveled
             Console.WriteLine("D for Damage");
             Console.WriteLine("H for Healing");
-            Console.WriteLine("C to cast spell");
+            Console.WriteLine("CS to cast spell");
             Console.WriteLine("Q to Quit");
         }
 

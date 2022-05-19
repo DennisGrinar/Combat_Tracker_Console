@@ -183,9 +183,21 @@ namespace Combat_Tracker_Console
             }
         }
 
-        public void CastSpell(string spellname, bool conc, int[] tar, int dur, ref List<Creature> combatants)
+        public void CastSpell(string spellname, bool conc, int dur, int[] tar, ref List<Creature> combatants, bool moveable)
         {
-            Spell sp = new(spellname, conc, tar, dur,ref combatants);
+            Spell sp = new(spellname, conc, dur, tar, ref combatants, moveable);
+
+            if (conc)
+            {
+                EndConcentrationSpell();
+                StartConcentration();
+            }
+
+            SpellTracker.Add(sp);
+        }
+        public void CastSpell(string spellname, bool conc, int dur)
+        {
+            Spell sp = new(spellname, conc, dur);
 
             if (conc)
             {
@@ -199,11 +211,11 @@ namespace Combat_Tracker_Console
 
         public void StartTurn()
         {
-            this.RemainingSpeed = this.speed;
-            this.HasMovement = true;
-            this.HasAction = true;
-            this.HasReaction = true;
-            this.HasBonusAction = true;
+            RemainingSpeed = speed;
+            HasMovement = true;
+            HasAction = true;
+            HasReaction = true;
+            HasBonusAction = true;
             foreach (Spell sp in SpellTracker)
             {
                 sp.EndRoundofSpell();
@@ -223,10 +235,10 @@ namespace Combat_Tracker_Console
 
         public void EndTurn()
         {
-            this.RemainingSpeed = 0;
-            this.HasMovement = false;
-            this.HasAction = false;
-            this.HasBonusAction = false;
+            HasMovement = false;
+            RemainingSpeed = 0;
+            HasAction = false;
+            HasBonusAction = false;
         }
         // Turn Actions
         public void Move(int distance) 
@@ -235,17 +247,17 @@ namespace Combat_Tracker_Console
           if (RemainingSpeed == 0) HasMovement = false;
         }
 
-        public void UseAction() {this.HasAction = false;}
+        public void UseAction() {HasAction = false;}
 
-        public void UseBonusAction() {this.HasBonusAction = false;}
+        public void UseBonusAction() {HasBonusAction = false;}
 
-        public void UseReaction() {this.HasReaction = false;}
+        public void UseReaction() {HasReaction = false;}
 
 
         //Spell Upkeep
         public bool IsConcentrating() {return Concentrating;}
-        public void StartConcentration() {this.Concentrating = true;}
-        public void EndConcentration() {this.Concentrating = false;}
+        public void StartConcentration() {Concentrating = true;}
+        public void EndConcentration() {Concentrating = false;}
         //Effected by Spell
         public void AddSpellEffect(string spellName) 
         {
