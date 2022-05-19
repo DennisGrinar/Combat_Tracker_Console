@@ -26,7 +26,7 @@
 
             Battle combat = new Battle(party, enemies);
 
-            
+
 
             combat.RollInitive();
             ref List<Creature> EncounterList = ref combat.GetCreatures();
@@ -61,24 +61,24 @@
                     case "D":
                         Console.WriteLine("Who is taking damage?");
                         Console.WriteLine(combat.GetCreatureSelection());
-                        creatureID = InputInt(1,EncounterList.Count()) - 1;
+                        creatureID = InputInt(1, EncounterList.Count()) - 1;
 
                         Console.WriteLine("How much damage?");
                         amount = InputInt();
 
                         Console.WriteLine("Was it a critial hit? Type 'Y' or 'N'");
 
-                        EncounterList[creatureID].TakeDamage(amount,InputBool());
-                        
+                        EncounterList[creatureID].TakeDamage(amount, InputBool());
+
                         break;
                     case "H":
                         Console.WriteLine("How much healing?");
                         amount = InputInt();
 
                         Console.WriteLine("Who is getting healing?");
-                        Console.WriteLine(combat.GetCreatureSelection());;
-                        EncounterList[(InputInt(1,EncounterList.Count) - 1)].Heal(amount);// -1 to account for list having 0 index
-                        
+                        Console.WriteLine(combat.GetCreatureSelection()); ;
+                        EncounterList[(InputInt(1, EncounterList.Count) - 1)].Heal(amount);// -1 to account for list having 0 index
+
                         break;
                     case "C":
 
@@ -95,18 +95,18 @@
 
                         Console.WriteLine("How many targets does the spell effect?");
                         amount = InputInt(1, EncounterList.Count());
-                        int[] charIds = new int[amount]; 
+                        int[] charIds = new int[amount];
 
-                        for (int i  = 0; i < amount; i++)
+                        for (int i = 0; i < amount; i++)
                         {
                             Console.WriteLine($"{amount - i} target(s) left. Pick a target");
                             combat.GetCreatureSelection();
                             charIds[i] = InputInt(1, EncounterList.Count()) - 1;// Figure out how to stop user frome selecting the same id twice
                         }
 
-                         List<Creature> targets =  new List<Creature>();
+                        List<Creature> targets = new List<Creature>();
 
-                        foreach(var key in charIds)
+                        foreach (var key in charIds)
                         {
                             targets.Add(EncounterList[key]);
                         }
@@ -114,8 +114,8 @@
                         Console.WriteLine("How may rounds does the spell last?");
                         amount = InputInt();
 
-                        EncounterList[creatureID].CastSpell(spellName, yesOrNo, charIds, amount,ref EncounterList);
-                        break;    
+                        EncounterList[creatureID].CastSpell(spellName, yesOrNo, charIds, amount, ref EncounterList);
+                        break;
 
                     default:
                         Console.WriteLine("Please try again");
@@ -125,7 +125,7 @@
                 PrintControls();
                 command = InputString();
             }
-          
+
         }
 
         public static void PrintControls()
@@ -148,7 +148,7 @@
                 input = Console.ReadLine();
                 if (input == null) Console.WriteLine("Please try again");
                 else input.ToString().ToUpper();
-            }while (input == null || input == "");
+            } while (input == null || input == "");
 
             return input;
         }
@@ -163,14 +163,14 @@
                 input = Console.ReadLine();
             }
             return num;
-            
+
         }
 
         private static int InputInt(int min, int max)
         {
             int num;
             var input = Console.ReadLine();
-            while (!int.TryParse(input, out num)|| num > max || num < min)
+            while (!int.TryParse(input, out num) || num > max || num < min)
             {
                 Console.WriteLine("Invalid input. Please try again.");
                 input = Console.ReadLine();
@@ -192,6 +192,7 @@
 
             return result;
         }
+    }
                 /* try
                 {
                     book.AddGrade(double.Parse(input));
