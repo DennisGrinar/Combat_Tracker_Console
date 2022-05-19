@@ -38,15 +38,14 @@
 
             Console.WriteLine("Combat is starting!");
             PrintControls();
-            
-            var input =  Console.ReadLine();
 
-            while (input != "Q")
+            var command = InputString();
+
+            while (command != "Q")
             {
-                var command = input; 
                 switch (command)
                 {
-                    case "NT":
+                    case "N":
                         combat.EndTurn();
                         break;
                     case "A":
@@ -57,67 +56,52 @@
                         break;
                     case "M":
                         Console.WriteLine($"How far? {combat.GetCurrentInitCreature().GetRemainingSpeed()} ft. left");
-                        input = Console.ReadLine();
-                        combat.GetCurrentInitCreature().Move(int.Parse(input));
+                        combat.GetCurrentInitCreature().Move(InputInt());
                         break;
-                    case "DAM":
+                    case "D":
                         Console.WriteLine("Who is taking damage?");
                         Console.WriteLine(combat.GetCreatureSelection());
-                        input = Console.ReadLine();
-                        creatureID = int.Parse(input) - 1;
+                        creatureID = InputInt(1,EncounterList.Count()) - 1;
 
                         Console.WriteLine("How much damage?");
-                        input = Console.ReadLine();
-                        amount = int.Parse(input);
+                        amount = InputInt();
 
                         Console.WriteLine("Was it a critial hit? Type 'Y' or 'N'");
-                        input = Console.ReadLine();
-                        bool crit = false;
-                        if(input == "Y") crit = true;
-                        EncounterList[creatureID].TakeDamage(amount,crit);
+
+                        EncounterList[creatureID].TakeDamage(amount,InputBool());
                         
                         break;
-                    case "HEAL":
+                    case "H":
                         Console.WriteLine("How much healing?");
-                        input = Console.ReadLine();
-                        amount = int.Parse(input);
+                        amount = InputInt();
 
                         Console.WriteLine("Who is getting healing?");
-                        Console.WriteLine(combat.GetCreatureSelection());
-                        input = Console.ReadLine();
-                        EncounterList[(int.Parse(input) - 1)].Heal(amount);// -1 to account for list having 0 index
+                        Console.WriteLine(combat.GetCreatureSelection());;
+                        EncounterList[(InputInt(1,EncounterList.Count) - 1)].Heal(amount);// -1 to account for list having 0 index
                         
                         break;
-                    case "CS":
+                    case "C":
 
                         Console.WriteLine("Who is casting the spell?");
                         Console.WriteLine(combat.GetCreatureSelection());
-                        input = Console.ReadLine();
-                        creatureID = int.Parse(input) - 1;
+                        creatureID = (InputInt(1, EncounterList.Count) - 1);
 
                         Console.WriteLine("What is the name of the spell?");
-                        input = Console.ReadLine();
-                        var spellName = input;
+                        var spellName = InputString();
 
-                        Console.WriteLine("Is it a concentration spell? Yes/No");
-                        bool yesOrNo = false;
-                        input = Console.ReadLine();
-                           if (input == "Yes") yesOrNo = true;
-                        else if (input == "No") yesOrNo = false;
-                        else Console.WriteLine("Please enter 'Yes' or 'No'.");
+                        Console.WriteLine("Is it a concentration spell? Y/N");
+                        bool yesOrNo = InputBool();
 
 
                         Console.WriteLine("How many targets does the spell effect?");
-                        input = Console.ReadLine();
-                        amount = int.Parse(input);
+                        amount = InputInt(1, EncounterList.Count());
                         int[] charIds = new int[amount]; 
 
                         for (int i  = 0; i < amount; i++)
                         {
                             Console.WriteLine($"{amount - i} target(s) left. Pick a target");
                             combat.GetCreatureSelection();
-                            input = Console.ReadLine();
-                            charIds[i] = int.Parse(input) - 1;
+                            charIds[i] = InputInt(1, EncounterList.Count()) - 1;// Figure out how to stop user frome selecting the same id twice
                         }
 
                          List<Creature> targets =  new List<Creature>();
@@ -128,8 +112,7 @@
                         }
 
                         Console.WriteLine("How may rounds does the spell last?");
-                        input = Console.ReadLine();
-                        amount = int.Parse(input);
+                        amount = InputInt();
 
                         EncounterList[creatureID].CastSpell(spellName, yesOrNo, charIds, amount,ref EncounterList);
                         break;    
@@ -140,23 +123,75 @@
                 }
                 combat.PrintInitativeOrder();
                 PrintControls();
-                input = Console.ReadLine();
+                command = InputString();
             }
           
         }
 
         public static void PrintControls()
         {
-            Console.WriteLine("NT for Next Turn");
+            Console.WriteLine("N for Next Turn");
             Console.WriteLine("A to use Action");
             Console.WriteLine("B to use B.Action");
             Console.WriteLine("M to use Movement");// figure out how to add distance traveled
-            Console.WriteLine("DAM for Damage");
-            Console.WriteLine("HEAL for Healing");
-            Console.WriteLine("CS to cast spell");
+            Console.WriteLine("D for Damage");
+            Console.WriteLine("H for Healing");
+            Console.WriteLine("C to cast spell");
             Console.WriteLine("Q to Quit");
         }
-    }
+
+        private static string InputString()
+        {
+            var input = "";
+            do
+            {
+                input = Console.ReadLine();
+                if (input == null) Console.WriteLine("Please try again");
+                else input.ToString().ToUpper();
+            }while (input == null || input == "");
+
+            return input;
+        }
+
+        private static int InputInt()
+        {
+            int num;
+            var input = Console.ReadLine();
+            while (!int.TryParse(input, out num))
+            {
+                Console.WriteLine("Invalid input. Please try again.");
+                input = Console.ReadLine();
+            }
+            return num;
+            
+        }
+
+        private static int InputInt(int min, int max)
+        {
+            int num;
+            var input = Console.ReadLine();
+            while (!int.TryParse(input, out num)|| num > max || num < min)
+            {
+                Console.WriteLine("Invalid input. Please try again.");
+                input = Console.ReadLine();
+            }
+            return num;
+        }
+
+        private static bool InputBool()
+        {
+            var input = "";
+            bool result = false;
+            do
+            {
+                input = Console.ReadLine();
+                if (input == "Y") result = true;
+                else if (input == "N") result = false;
+                else Console.WriteLine("Invalid input. Please try again.");
+            } while (input != "Y" || input != "N");
+
+            return result;
+        }
                 /* try
                 {
                     book.AddGrade(double.Parse(input));

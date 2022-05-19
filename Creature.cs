@@ -18,7 +18,7 @@ namespace Combat_Tracker_Console
         int modSpeed {get; set;}
 
         // Initial Order
-        public int BattleInit {get; set;}
+        public int BattleInit {get; set;} 
         public string InitGroup {get; set;}
         
         // Turn Info
@@ -51,7 +51,7 @@ namespace Combat_Tracker_Console
             hasDeathSaves = dSaves;
             // Setting start values.
             TempHP = 0;
-            this.StartTurn();
+            EndTurn();
             Concentrating = false;
             Status.Add("None");
             SpellEffects.Add("None");

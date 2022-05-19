@@ -93,7 +93,7 @@ namespace Combat_Tracker_Console
         public string GetCreatureSelection()
         {
             int i = 1;
-            var info = "Enter the number on the left to select the target. \n";
+            var info = "Enter the number on the left. \n";
             foreach(var cre in InitativeOrder)
             {
                 info += $"{i} \t {cre.Name}\n";
