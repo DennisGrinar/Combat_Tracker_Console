@@ -34,6 +34,7 @@ namespace Combat_Tracker_Console
         List<string> SpellEffects= new List<string>();
         bool hasDeathSaves {get;}
         DeathSavingThrowCounter DeathSaves  = new DeathSavingThrowCounter();
+
         List<Spell> SpellTracker = new List<Spell>();
 
 
@@ -80,7 +81,7 @@ namespace Combat_Tracker_Console
         {
             string info =
             $"{BattleInit} \t{Name}  \tHP:{HP}/{MaxHP} \tAC:{AC} \tSPD:{RemainingSpeed}/{speed}\n" 
-          + $"\tACTION {HasAction}\tB. ACTION {HasBonusAction} \t MOVEMENT {HasMovement} \t REACTION {HasReaction} \t Concenrating {Concentrating}\n"
+          + $"\tACTION {HasAction}\tBONUS ACTION {HasBonusAction} \t MOVEMENT {HasMovement} \t REACTION {HasReaction} \t Concenrating {Concentrating}\n"
           + $"\tStatus Effects: {this.GetListReadout(Status)} \t Spell Effects: {this.GetListReadout(SpellEffects)} \n"
           + $"\t Spells Cast:";
 
@@ -89,7 +90,7 @@ namespace Combat_Tracker_Console
             {
                 foreach (var sp in SpellTracker)
                 {
-                   info += $"\n \t\t {sp.SpellName()}\t\t Effecting: {sp.GetTargets()}\t\t Duration: {sp.GetRemainingDuration()}\t Concentration: {sp.IsConcentrationSpell()}\n";
+                   info += $"\n \t\t {sp.SpellName()}\t Effecting: {sp.GetTargets()}\t Duration: {sp.GetRemainingDuration()}\t Concentration: {sp.IsConcentrationSpell()}\n";
                 }
             }
 
@@ -143,14 +144,14 @@ namespace Combat_Tracker_Console
                 if (HP == 0) 
                 {
                     ChangeStatus("Unconscious");
-                    if (Concentrating) this.EndConcentrationSpell();
+                    if (Concentrating) EndConcentrationSpell();
                 }
                 // Drops below zero.
                 if (HP < 0) 
-                {
+                {//Work on this. If instant death, still runs through Death Saving Throw code.
                     if (MaxHP + HP <= 0) ChangeStatus("Dead");// check for instant death
 
-                    if (Concentrating) this.EndConcentrationSpell();
+                    if (Concentrating) EndConcentrationSpell();
                     
                     HP = 0;
                 
@@ -182,6 +183,19 @@ namespace Combat_Tracker_Console
             }
         }
 
+        public void CastSpell(string spellname, bool conc, int[] tar, int dur, ref List<Creature> combatants)
+        {
+            Spell sp = new(spellname, conc, tar, dur,ref combatants);
+
+            if (conc)
+            {
+                EndConcentrationSpell();
+                StartConcentration();
+            }
+
+            SpellTracker.Add(sp);
+        }
+
 
         public void StartTurn()
         {
@@ -193,8 +207,18 @@ namespace Combat_Tracker_Console
             foreach (Spell sp in SpellTracker)
             {
                 sp.EndRoundofSpell();
-                if (sp.GetRemainingDuration() == 0) {sp.EndSpell();}
+                if (sp.GetRemainingDuration() == 0) 
+                {
+                    EndSpell(sp);
+                }
             }
+        }
+
+        public void EndSpell(Spell sp)
+        {
+            if (sp.IsConcentrationSpell()) EndConcentration();
+            sp.EndSpell();
+            SpellTracker.Remove(sp);
         }
 
         public void EndTurn()
@@ -234,18 +258,25 @@ namespace Combat_Tracker_Console
             this.SpellEffects.Remove(spellName);
             if (SpellEffects.Count == 0) SpellEffects.Add("None");
         }
-        // Casted the spell
-        public void AddToSpellTracker(Spell sp){SpellTracker.Add(sp);}
-
-        public void RemoveFromSpellTracker(Spell sp){SpellTracker.Remove(sp);}
 
         public void EndConcentrationSpell()
         {
+            bool needToEndSpell = false;
+            int id = 0;
+            int i = 0;
+
+            //checking to see if there is a concentration spell up
             foreach (Spell sp in SpellTracker)
             {
-                if (sp.IsConcentrationSpell()) sp.EndSpell();
+                if (sp.IsConcentrationSpell())
+                {
+                    needToEndSpell = true;
+                    id = i;
+                }
+                i++;
             }
-            Concentrating = false;
+
+            if (needToEndSpell) EndSpell(SpellTracker[id]);
         }
         private void ConcentrationCheck(int damage)
         {

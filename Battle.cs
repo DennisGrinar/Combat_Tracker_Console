@@ -103,12 +103,6 @@ namespace Combat_Tracker_Console
             return info;
         }
 
-        public void AddToActiveSpellList(string spellName, int casterID, bool conc, int[] targetID, int dur )
-        {
-            Spell sp = new Spell(spellName, casterID, conc, targetID, dur, ref InitativeOrder);
-            ActiveSpellList.Add(sp);
-        }
-        public void RemoveFromActiveSpellList(Spell sp){ActiveSpellList.Remove(sp);}
 
       /*  public async void Fight()
         {

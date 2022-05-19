@@ -102,7 +102,7 @@
                         Console.WriteLine("Is it a concentration spell? Yes/No");
                         bool yesOrNo = false;
                         input = Console.ReadLine();
-                        if (input == "Yes") yesOrNo = true;
+                           if (input == "Yes") yesOrNo = true;
                         else if (input == "No") yesOrNo = false;
                         else Console.WriteLine("Please enter 'Yes' or 'No'.");
 
@@ -120,7 +120,7 @@
                             charIds[i] = int.Parse(input) - 1;
                         }
 
-                         List< Creature> targets =  new List<Creature>();
+                         List<Creature> targets =  new List<Creature>();
 
                         foreach(var key in charIds)
                         {
@@ -131,7 +131,7 @@
                         input = Console.ReadLine();
                         amount = int.Parse(input);
 
-                        combat.AddToActiveSpellList(spellName, creatureID, yesOrNo,charIds, amount);
+                        EncounterList[creatureID].CastSpell(spellName, yesOrNo, charIds, amount,ref EncounterList);
                         break;    
 
                     default:
