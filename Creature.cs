@@ -82,7 +82,7 @@ namespace Combat_Tracker_Console
             string info =
             $"{BattleInit} \t{Name}  \tHP:{HP}/{MaxHP} \tAC:{AC} \tSPD:{RemainingSpeed}/{speed}\n" 
           + $"\tACTION {HasAction}\tBONUS ACTION {HasBonusAction} \t MOVEMENT {HasMovement} \t REACTION {HasReaction} \t Concenrating {Concentrating}\n"
-          + $"\tStatus Effects: {this.GetListReadout(Status)} \t Spell Effects: {this.GetListReadout(SpellEffects)} \n"
+          + $"\tStatus Effects: {GetListReadout(Status)} \t Spell Effects: {GetListReadout(SpellEffects)} \n"
           + $"\t Spells Cast:";
 
             if (this.SpellTracker.Count == 0) info += " None";
@@ -178,8 +178,7 @@ namespace Combat_Tracker_Console
                 
                 if (Status.Contains("Dying"))
                 {
-                    RemoveStatus("Dying");
-                    RemoveStatus("Unconscious");
+                    ChangeStatus("Prone");
                     DeathSaves.ResetDeathSaves();
                 }
             }

@@ -18,15 +18,16 @@ namespace Combat_Tracker_Console
 
         public static void PrintControls()
         {
-            Console.WriteLine("N for Next Turn");
-            Console.WriteLine("A to use Action");
-            Console.WriteLine("B to use B.Action");
-            Console.WriteLine("M to use Movement");// figure out how to add distance traveled
-            Console.WriteLine("D for Damage");
-            Console.WriteLine("H for Healing");
-            Console.WriteLine("CS to cast spell");
-            Console.WriteLine("Q to Quit");
-        }
+            Outputs.Message("N for Next Turn");
+            Outputs.Message("A to use Action");
+            Outputs.Message("B to use B.Action");
+            Outputs.Message("M to use Movement");// figure out how to add distance traveled
+            Outputs.Message("R to use Reaction");
+            Outputs.Message("D for Damage");
+            Outputs.Message("H for Healing");
+            Outputs.Message("CS to cast spell");
+            Outputs.Message("Q to Quit");
+        }   
     }
     
 }

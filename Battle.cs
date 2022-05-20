@@ -67,8 +67,8 @@ namespace Combat_Tracker_Console
         {
             foreach(var cre in InitativeOrder)
             {
-                if (InitativeOrder[initativeTracker] == cre) Console.WriteLine($"-> {cre.Info()}");
-                else Console.WriteLine(cre.Info());
+                if (InitativeOrder[initativeTracker] == cre) Outputs.Message($"-> {cre.Info()}");
+                else Outputs.Message(cre.Info());
             }
 
         } 

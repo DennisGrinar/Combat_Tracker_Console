@@ -24,7 +24,7 @@
             };
 
 
-            Battle combat = new Battle(party, enemies);
+            Battle combat = new (party, enemies);
 
 
 
@@ -65,6 +65,12 @@
                         }
 
                         combat.GetCurrentInitCreature().Move(amount);
+                        break;
+                    case "R":
+                        Outputs.Message("Who is using thier reaction?");
+                        Outputs.Message(combat.GetCreatureSelection());
+                        creatureID = Inputs.InputInt(1, EncounterList.Count()) - 1;
+                        EncounterList[creatureID].UseReaction();
                         break;
                     case "D":
                         Outputs.Message("Who is taking damage?");
