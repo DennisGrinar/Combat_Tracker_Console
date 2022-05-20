@@ -115,11 +115,11 @@ namespace Combat_Tracker_Console
 
         public void SetInitiative (int init)
         {
-            this.BattleInit = init;
+            BattleInit = init;
         }
 
       
-        public void TakeDamage(int damage,bool crit)
+        public void TakeDamage(int damage)
         {
             //Applying the rules for if a character is already dying.
             if (Status.Contains("Dying"))//checking for instant death saving throw failures if creature is already dying.
@@ -130,6 +130,8 @@ namespace Combat_Tracker_Console
                     DeathSaves.ResetDeathSaves();
                 }
                 DeathSaves.MakeDeathSavingThrow(false);
+                Outputs.Message("Was the hit considered a crital hit?");
+                bool crit = Inputs.InputBool();
                 if (crit) DeathSaves.MakeDeathSavingThrow(false);
             }
             

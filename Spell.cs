@@ -4,7 +4,7 @@ namespace Combat_Tracker_Console
     {
         string Name {get;}
         bool concentration {get;}
-        List<Creature> Targets = new List<Creature>();
+        List<Creature> Targets = new();
         int duration {get;set;}
         bool CreatureTargets { get; }
         bool MoveableTarget { get; }

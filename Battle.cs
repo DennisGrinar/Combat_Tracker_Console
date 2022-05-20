@@ -3,10 +3,10 @@ namespace Combat_Tracker_Console
  public class Battle
     {
         Dice die = new Dice();
-        List<Creature> Party = new List<Creature>();
-        List<Creature> Encounter = new List<Creature>();
-        List<Creature> InitativeOrder = new List<Creature>();
-        List<Spell> ActiveSpellList = new List<Spell>();
+        List<Creature> Party = new();
+        List<Creature> Encounter = new();
+        List<Creature> InitativeOrder = new();
+        List<Spell> ActiveSpellList = new();
 
         int initativeTracker{get;set;}
         int TopOfInitative{get;set;}
@@ -29,8 +29,8 @@ namespace Combat_Tracker_Console
             InitativeOrder.AddRange(Encounter);
             
 
-            List<Creature> groups = new List<Creature>();
-            List<Creature> remove = new List<Creature>();
+            List<Creature> groups = new ();
+            List<Creature> remove = new ();
 
             foreach(var cre in InitativeOrder)
             {
