@@ -35,7 +35,7 @@ namespace Combat_Tracker_Console
         {
             int num;
             var input = Console.ReadLine();
-            while (!int.TryParse(input, out num))
+            while (!int.TryParse(input, out num)|| num < 1)
             {
                 Outputs.Invalid();
                 input = Console.ReadLine();

@@ -8,7 +8,7 @@
             Dice die = new Dice();
 
             List<Creature> party = new List<Creature>()
-            {
+            {           //Name  HP  MaxHP AC SPD, DS, Init Group
              new Creature("Bob", 30, 30, 15, 30, true, "" ),
              new Creature("Steve", 20, 35, 16, 20, true, ""),
              new Creature("Amy", 17, 35, 16, 30, true, ""),
@@ -30,6 +30,7 @@
 
             combat.RollInitive();
             ref List<Creature> EncounterList = ref combat.GetCreatures();
+            ref List<Spell> SpellList = ref combat.GetSpellTracker();
             int amount;
             int creatureID;
 
@@ -43,6 +44,7 @@
 
             while (command != "Q")
             {
+               
                 switch (command)
                 {
                     case "N":
@@ -69,20 +71,18 @@
                     case "R":
                         Outputs.Message("Who is using thier reaction?");
                         Outputs.Message(combat.GetCreatureSelection());
-                        creatureID = Inputs.InputInt(1, EncounterList.Count()) - 1;
+                        creatureID = Inputs.InputInt(1, EncounterList.Count) - 1;
                         EncounterList[creatureID].UseReaction();
                         break;
                     case "D":
                         Outputs.Message("Who is taking damage?");
                         Outputs.Message(combat.GetCreatureSelection());
-                        creatureID = Inputs.InputInt(1, EncounterList.Count()) - 1;
+                        creatureID = Inputs.InputInt(1, EncounterList.Count) - 1;
 
                         Outputs.Message("How much damage?");
                         amount = Inputs.InputInt();
 
-                        Outputs.Message("Was it a critial hit? Type 'Y' or 'N'");
-
-                        EncounterList[creatureID].TakeDamage(amount);
+                        EncounterList[creatureID].TakeDamage(amount, ref SpellList);
 
                         break;
                     case "H":
@@ -105,9 +105,17 @@
 
                         Outputs.Message("Is it a concentration spell? Y/N");
                         bool conc = Inputs.InputBool();
+                        //Checking to see if the caster already has a concentration spell up and ends it.
+                        if (conc)
+                        {
+                            if (EncounterList[creatureID].IsConcentrating())
+                            {
+                                combat.EndConcentrationSpell(creatureID);
+                            }
+                        }
 
                         Outputs.Message("How may rounds does the spell last?");
-                        amount = Inputs.InputInt();
+                        var duration = Inputs.InputInt();
 
 
 
@@ -115,17 +123,17 @@
                         if (Inputs.InputBool())
                         {
                             Outputs.Message("How many targets does the spell effect?");
-                            amount = Inputs.InputInt(1, EncounterList.Count());
+                            amount = Inputs.InputInt(1, EncounterList.Count);
                             int[] charIds = new int[amount];
 
                             for (int i = 0; i < amount; i++)
                             {
                                 Outputs.Message($"{amount - i} target(s) left. Pick a target");
                                 combat.GetCreatureSelection();
-                                charIds[i] = Inputs.InputInt(1, EncounterList.Count()) - 1;// Figure out how to stop user frome selecting the same id twice
+                                charIds[i] = Inputs.InputInt(1, EncounterList.Count) - 1;// Figure out how to stop user frome selecting the same id twice
                             }
 
-                            List<Creature> targets = new List<Creature>();
+                            List<Creature> targets = new();
 
                             foreach (var key in charIds)
                             {
@@ -135,9 +143,9 @@
                             Outputs.Message("Is the spell moveable? Y/N");
                             bool moveable = Inputs.InputBool();
 
-                            EncounterList[creatureID].CastSpell(spellName, conc, amount, charIds, ref EncounterList, moveable);
+                            SpellList.Add(new Spell (spellName, conc, duration, charIds, ref EncounterList, moveable, creatureID));
                         }
-                        else EncounterList[creatureID].CastSpell(spellName, conc, amount);
+                        else SpellList.Add(new Spell(spellName, conc, duration, ref EncounterList, creatureID));
                         break;
 
                     default:
@@ -167,6 +175,6 @@
                 finally
                 {
                     // code that will run even if an Exception occurs.
-                }
-                */
+                }*/
+    }           
 }
