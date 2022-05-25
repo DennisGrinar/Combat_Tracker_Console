@@ -23,6 +23,7 @@ namespace Combat_Tracker_Console
             Outputs.Message("B to use B.Action");
             Outputs.Message("M to use Movement");
             Outputs.Message("R to use Reaction");
+            Outputs.Message("GU to Get Up from Prone");
             Outputs.Message("D for Damage");
             Outputs.Message("H for Healing");
             Outputs.Message("CS to cast spell");

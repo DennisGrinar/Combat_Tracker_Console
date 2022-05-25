@@ -10,7 +10,7 @@
             List<Creature> party = new List<Creature>()
             {           //Name  HP  MaxHP AC SPD, DS, Init Group
              new Creature("Bob", 30, 30, 15, 30, true, "" ),
-             new Creature("Steve", 20, 35, 16, 20, true, ""),
+             new Creature("Steve", 20, 35, 16, 25, true, ""),
              new Creature("Amy", 17, 35, 16, 30, true, ""),
              new Creature("Dustin", 40, 45, 15, 30, true, "")
             };
@@ -74,6 +74,16 @@
                         creatureID = Inputs.InputInt(1, EncounterList.Count) - 1;
                         EncounterList[creatureID].UseReaction();
                         break;
+
+                    case "GU":
+                        Outputs.Message("Who is getting up from being Prone?");
+                        Outputs.Message(combat.GetCreatureSelection());
+                        creatureID = Inputs.InputInt(1, EncounterList.Count) - 1;
+                        Outputs.Message("Will this cost them half their speed?");
+                        EncounterList[creatureID].GetUp(Inputs.InputBool());
+
+                        break;
+
                     case "D":
                         Outputs.Message("Who is taking damage?");
                         Outputs.Message(combat.GetCreatureSelection());

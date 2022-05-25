@@ -83,7 +83,7 @@ namespace Combat_Tracker_Console
         public String Info(ref List<Spell> spellTracker)
         {
             string info =
-            $"{BattleInit} \t{Name}  \tHP:{HP}/{MaxHP} \tAC:{AC} \tSPD:{RemainingSpeed}/{speed}\n"
+            $"\t{BattleInit} \t{Name}  \tHP:{HP}/{MaxHP} \tAC:{AC} \tSPD:{RemainingSpeed}/{speed}\n"
           + $"\tACTION {HasAction}\tBONUS ACTION {HasBonusAction} \t MOVEMENT {HasMovement} \t REACTION {HasReaction} \t\t Concenrating {Concentrating}\n"
           + $"\tStatus Effects: {GetListReadout(Status)} \t"
           + $" Spell Effects: {GetSpellEffects(spellTracker)} \n"
@@ -207,12 +207,26 @@ namespace Combat_Tracker_Console
 
                 if (HP > MaxHP) HP = MaxHP; // HP can not go over Max HP.
 
-                if (Status.Contains("Dying") || Status.Contains("Unconcious"))
+                if (Status.Contains("Dying") || Status.Contains("Unconscious"))
                 {
                     ChangeStatus("Prone");
                     DeathSaves.ResetDeathSaves();
                 }
             }
+        }
+
+        public void GetUp (bool useSpeed)
+        {
+            if (Status.Contains("Prone"))
+            {
+                RemoveStatus("Prone");
+                if (useSpeed)
+                {
+                    RemainingSpeed = RemainingSpeed / 2;
+                    RemainingSpeed = RemainingSpeed - (RemainingSpeed % 5);
+                }
+            }
+            else Outputs.Message("Combatant is not Prone");
         }
 
 /*       public void CastSpell(string spellname, bool conc, int dur, int[] tar, ref List<Creature> combatants, bool moveable, int casterID)
