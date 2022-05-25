@@ -73,7 +73,11 @@
                     case "GU":
                         creatureID = CreatureSelection("Who is getting up from being Prone?", combat);
                         EncounterList[creatureID].GetUp(Inputs.InputBool("Will this cost them half their speed?"));
+                        break;
 
+                    case "KD":
+                        creatureID = CreatureSelection("Who is getting knock down to Prone?", combat);
+                        EncounterList[creatureID].KnockedDown();
                         break;
 
                     case "D":

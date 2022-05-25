@@ -324,13 +324,12 @@ namespace Combat_Tracker_Console
             int dc = 10;
             if (damage / 2 > 10) dc = damage / 2;
 
-
-            Outputs.Message($"DC = {dc} What was the roll?");
-            var input = Inputs.InputInt();
+            var input = Inputs.InputInt($"DC = {dc} What was the roll?");
             if (dc > input) EndConcentrationSpell(ref spellTracker);
         }
 
         // Status Changes
+        public void KnockDown() { Status.Add("Prone"); }
         private void ChangeStatus(string newStatus)
         {
             Status.Clear();
@@ -343,6 +342,7 @@ namespace Combat_Tracker_Console
         }
         private void AddStatus(string newStatus)
         {
+            if (Status.Contains("None")) Status.Remove("None");
             Status.Add(newStatus);
         }
 
