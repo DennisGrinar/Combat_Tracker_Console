@@ -8,8 +8,9 @@ namespace Combat_Tracker_Console
 {
     internal class Inputs
     {
-        public static string InputString()
+        public static string InputString(string message)
         {
+            Outputs.Message(message);
             var input = "";
             do
             {
@@ -20,8 +21,9 @@ namespace Combat_Tracker_Console
 
             return input.ToUpper();
         }
-        public static string InputName()
+        public static string InputName(string message)
         {
+            Outputs.Message(message);
             var input = "";
             do
             {
@@ -31,8 +33,9 @@ namespace Combat_Tracker_Console
             return input;
         }
 
-        public static int InputInt()
+        public static int InputInt(string message)
         {
+            Outputs.Message(message);
             int num;
             var input = Console.ReadLine();
             while (!int.TryParse(input, out num)|| num < 1)
@@ -44,8 +47,9 @@ namespace Combat_Tracker_Console
 
         }
 
-        public static int InputInt(int min, int max)
+        public static int InputInt(int min, int max, string message)
         {
+            Outputs.Message(message);
             int num;
             var input = Console.ReadLine();
             while (!int.TryParse(input, out num) || num > max || num < min)
@@ -56,8 +60,9 @@ namespace Combat_Tracker_Console
             return num;
         }
 
-        public static bool InputBool()
+        public static bool InputBool(string message)
         {
+            Outputs.Message($"{message} Y/N");
             var input = "";
             bool result = false;
             do

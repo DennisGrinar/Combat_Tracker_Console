@@ -36,11 +36,9 @@
 
             combat.PrintInitativeOrder();
 
-
-            Outputs.Message("Combat is starting!");
             Outputs.PrintControls();
 
-            var command = Inputs.InputString();
+            var command = Inputs.InputString("Combat is starting! \n Select a command");
 
             while (command != "Q")
             {
@@ -57,65 +55,49 @@
                         combat.GetCurrentInitCreature().UseBonusAction();
                         break;
                     case "M":
-                        Outputs.Message($"How far? {combat.GetCurrentInitCreature().GetRemainingSpeed()} ft. left");
-                        amount = Inputs.InputInt();
+                        amount = Inputs.InputInt($"How far? {combat.GetCurrentInitCreature().GetRemainingSpeed()} ft. left");
                         int maxDistance = combat.GetCurrentInitCreature().GetRemainingSpeed();
                         while (amount > maxDistance) 
                         {
-                            Outputs.Message("Distance is too far. Please try again");
-                            amount = Inputs.InputInt();
+                            amount = Inputs.InputInt("Distance is too far. Please try again");
                         }
 
                         combat.GetCurrentInitCreature().Move(amount);
                         break;
                     case "R":
-                        Outputs.Message("Who is using thier reaction?");
-                        Outputs.Message(combat.GetCreatureSelection());
-                        creatureID = Inputs.InputInt(1, EncounterList.Count) - 1;
+
+                        creatureID = CreatureSelection("Who is using thier reaction?", combat);
                         EncounterList[creatureID].UseReaction();
                         break;
 
                     case "GU":
-                        Outputs.Message("Who is getting up from being Prone?");
-                        Outputs.Message(combat.GetCreatureSelection());
-                        creatureID = Inputs.InputInt(1, EncounterList.Count) - 1;
-                        Outputs.Message("Will this cost them half their speed?");
-                        EncounterList[creatureID].GetUp(Inputs.InputBool());
+                        creatureID = CreatureSelection("Who is getting up from being Prone?", combat);
+                        EncounterList[creatureID].GetUp(Inputs.InputBool("Will this cost them half their speed?"));
 
                         break;
 
                     case "D":
-                        Outputs.Message("Who is taking damage?");
-                        Outputs.Message(combat.GetCreatureSelection());
-                        creatureID = Inputs.InputInt(1, EncounterList.Count) - 1;
+                        creatureID = CreatureSelection("Who is taking damage?", combat);
 
-                        Outputs.Message("How much damage?");
-                        amount = Inputs.InputInt();
+                        amount = Inputs.InputInt("How much damage?");
 
                         EncounterList[creatureID].TakeDamage(amount, ref SpellList);
 
                         break;
                     case "H":
-                        Outputs.Message("How much healing?");
-                        amount = Inputs.InputInt();
 
-                        Outputs.Message("Who is getting healing?");
-                        Outputs.Message(combat.GetCreatureSelection());
-                        creatureID = (Inputs.InputInt(1, EncounterList.Count) - 1);// -1 to account for list having 0 index
+                        amount = Inputs.InputInt("How much healing?");
+
+                        creatureID = CreatureSelection("Who is getting healing?", combat);
                         EncounterList[creatureID].Heal(amount);
 
                         break;
                     case "CS":
+                        creatureID = CreatureSelection("Who is casting the spell?", combat);
 
-                        Outputs.Message("Who is casting the spell?");
-                        Outputs.Message(combat.GetCreatureSelection());
-                        creatureID = (Inputs.InputInt(1, EncounterList.Count) - 1);
+                        var spellName = Inputs.InputName("What is the name of the spell?");
 
-                        Outputs.Message("What is the name of the spell?");
-                        var spellName = Inputs.InputName();
-
-                        Outputs.Message("Is it a concentration spell? Y/N");
-                        bool conc = Inputs.InputBool();
+                        bool conc = Inputs.InputBool("Is it a concentration spell?");
                         //Checking to see if the caster already has a concentration spell up and ends it.
                         if (conc)
                         {
@@ -125,23 +107,17 @@
                             }
                         }
 
-                        Outputs.Message("How may rounds does the spell last?");
-                        var duration = Inputs.InputInt();
+                        var duration = Inputs.InputInt("How may rounds does the spell last?");
 
-
-
-                        Outputs.Message("Does the spell target any creatures? Y/N");
-                        if (Inputs.InputBool())
+                        if (Inputs.InputBool("Does the spell target any creatures?"))
                         {
-                            Outputs.Message("How many targets does the spell effect?");
-                            amount = Inputs.InputInt(1, EncounterList.Count);
+                            amount = Inputs.InputInt(1, EncounterList.Count, "How many targets does the spell effect?");
                             int[] charIds = new int[amount];
 
                             for (int i = 0; i < amount; i++)
                             {
-                                Outputs.Message($"{amount - i} target(s) left. Pick a target");
-                                combat.GetCreatureSelection();
-                                charIds[i] = Inputs.InputInt(1, EncounterList.Count) - 1;// Figure out how to stop user frome selecting the same id twice
+                                charIds[i] = CreatureSelection($"{amount - i} target(s) left. Pick a target", combat);
+                                // Figure out how to stop user frome selecting the same id twice
                             }
 
                             List<Creature> targets = new();
@@ -151,8 +127,7 @@
                                 targets.Add(EncounterList[key]);
                             }
 
-                            Outputs.Message("Is the spell moveable? Y/N");
-                            bool moveable = Inputs.InputBool();
+                            bool moveable = Inputs.InputBool("Is the spell moveable?");
 
                             SpellList.Add(new Spell (spellName, conc, duration, charIds, ref EncounterList, moveable, creatureID));
                         }
@@ -165,11 +140,16 @@
                 }
                 combat.PrintInitativeOrder();
                 Outputs.PrintControls();
-                command = Inputs.InputString();
+                command = Inputs.InputString("Select a command");
             }
+            
 
         }
-
+        private static int CreatureSelection(string message,Battle combat)
+        {
+            Outputs.Message(combat.GetCreatureSelection());
+            return (Inputs.InputInt(1, combat.GetCreatures().Count(), message) - 1); // -1 to account for List have a zero index
+        }
         
                 /* try
                 {

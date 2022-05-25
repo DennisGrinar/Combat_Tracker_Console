@@ -161,8 +161,7 @@ namespace Combat_Tracker_Console
                     DeathSaves.ResetDeathSaves();
                 }
                 DeathSaves.MakeDeathSavingThrow(false);
-                Outputs.Message("Was the hit considered a crital hit?");
-                bool crit = Inputs.InputBool();
+                bool crit = Inputs.InputBool("Was the hit considered a crital hit?");
                 if (crit) DeathSaves.MakeDeathSavingThrow(false);
             }
 
