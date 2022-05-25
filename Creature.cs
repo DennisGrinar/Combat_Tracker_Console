@@ -228,32 +228,7 @@ namespace Combat_Tracker_Console
             else Outputs.Message("Combatant is not Prone");
         }
 
-/*       public void CastSpell(string spellname, bool conc, int dur, int[] tar, ref List<Creature> combatants, bool moveable, int casterID)
-        {
-            Spell sp = new(spellname, conc, dur, tar, ref combatants, moveable, casterID);
 
-            if (conc)
-            {
-                EndConcentrationSpell();
-                StartConcentration();
-            }
-
-            SpellTracker.Add(sp);
-        }
-        public void CastSpell(string spellname, bool conc, int dur)
-        {
-            Spell sp = new(spellname, conc, dur);
-
-            if (conc)
-            {
-                EndConcentrationSpell();
-                StartConcentration();
-            }
-
-            SpellTracker.Add(sp);
-        }
-
-*/
         public void StartTurn()
         {
             RemainingSpeed = speed;
@@ -264,13 +239,6 @@ namespace Combat_Tracker_Console
 
         }
 
- /*       public void EndSpell(Spell sp)
-        {
-            if (sp.IsConcentrationSpell()) EndConcentration();
-            sp.EndSpell();
-            SpellTracker.Remove(sp);
-        }
- */
         public void EndTurn()
         {
             HasMovement = false;
