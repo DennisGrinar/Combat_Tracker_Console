@@ -207,7 +207,7 @@ namespace Combat_Tracker_Console
 
                 if (HP > MaxHP) HP = MaxHP; // HP can not go over Max HP.
 
-                if (Status.Contains("Dying"))
+                if (Status.Contains("Dying") || Status.Contains("Unconcious"))
                 {
                     ChangeStatus("Prone");
                     DeathSaves.ResetDeathSaves();

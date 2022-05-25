@@ -90,8 +90,9 @@
                         amount = Inputs.InputInt();
 
                         Outputs.Message("Who is getting healing?");
-                        Outputs.Message(combat.GetCreatureSelection()); ;
-                        EncounterList[(Inputs.InputInt(1, EncounterList.Count) - 1)].Heal(amount);// -1 to account for list having 0 index
+                        Outputs.Message(combat.GetCreatureSelection());
+                        creatureID = (Inputs.InputInt(1, EncounterList.Count) - 1);// -1 to account for list having 0 index
+                        EncounterList[creatureID].Heal(amount);
 
                         break;
                     case "CS":

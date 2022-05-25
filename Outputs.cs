@@ -21,7 +21,7 @@ namespace Combat_Tracker_Console
             Outputs.Message("N for Next Turn");
             Outputs.Message("A to use Action");
             Outputs.Message("B to use B.Action");
-            Outputs.Message("M to use Movement");// figure out how to add distance traveled
+            Outputs.Message("M to use Movement");
             Outputs.Message("R to use Reaction");
             Outputs.Message("D for Damage");
             Outputs.Message("H for Healing");
